@@ -10,6 +10,7 @@ QT       += network
 
 TARGET = vreen
 TEMPLATE = lib
+CONFIG += staticlib
 
 #DEFINES += VK_LIBRARY
 
@@ -95,6 +96,6 @@ $$escape_expand(\\n\\t)
 unix:{
     QMAKE_POST_LINK += && $(MKDIR) $$VREEN_LIBS_DIR
     $$escape_expand(\\n\\t)
-    QMAKE_POST_LINK += && $(COPY) $$PWD/*.so $$VREEN_LIBS_DIR
+    QMAKE_POST_LINK += && $(COPY) $$PWD/*.a $$VREEN_LIBS_DIR
     $$escape_expand(\\n\\t)
 }

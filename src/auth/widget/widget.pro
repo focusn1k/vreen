@@ -48,10 +48,14 @@ RCC_DIR = $$DESTDIR/.qrc
 UI_DIR = $$DESTDIR/.ui
 
 
+#include dir
+mkpath($$VREEN_INCLUDE_DIR/auth)
+QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/*.h) $$toNativeSeparators($$VREEN_INCLUDE_DIR/auth)$$escape_expand(\n\t))
+
 win32:{
     QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.lib) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 }
 
 unix:{
-    QMAKE_POST_LINK = $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.a) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
+    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.a) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 }

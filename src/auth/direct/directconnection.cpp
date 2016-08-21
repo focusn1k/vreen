@@ -22,7 +22,7 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#include "directconnection_p.h"
+#include "directconnection.h"
 #include <vreen/json.h>
 #include <vreen/reply.h>
 

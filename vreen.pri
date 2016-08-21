@@ -11,6 +11,11 @@ defineReplace(cleanPath) {
     return($$join(out, /, $$pfx))
 }
 
+defineReplace(toNativeSeparators) {
+    return($$replace(1, /, $$QMAKE_DIR_SEP))
+}
+
+
 sub_dir = $$_PRO_FILE_PWD_
 sub_dir ~= s,^$$re_escape($$PWD),,
 

@@ -10,26 +10,17 @@ QT       += network
 
 TARGET = vreen
 TEMPLATE = lib
-CONFIG += staticlib
+CONFIG += lib
 
-#DEFINES += VK_LIBRARY
+DEFINES += VK_LIBRARY
 
 SOURCES += $$PWD/*.cpp
 
 PUBLIC_HEADERS += $$PWD/*[^p].h
 PRIVATE_HEADERS += $$PWD/*_p.h
+
 HEADERS = $$PUBLIC_HEADERS \
-    $$PRIVATE_HEADERS
-    
-exists(../3rdparty/k8json) {
-    include(../3rdparty/k8json/k8json.pri)
-    DEFINES += K8JSON_INCLUDE_GENERATOR
-    DEFINES += K8JSON_INCLUDE_COMPLEX_GENERATOR
-    INCLUDEPATH += ../3rdparty
-} else {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += k8json
-}
+            $$PRIVATE_HEADERS
 
 isEmpty( PREFIX ):INSTALL_PREFIX = /usr
 else:INSTALL_PREFIX = $${PREFIX}
@@ -52,16 +43,19 @@ symbian {
     DEPLOYMENT += addFiles
 }
 
-win32 {
-    CONFIG(debug, debug|release) {
-	    TARGET = $$member(TARGET, 0)d
+
+CONFIG(debug, debug|release) {
+    BUILD = debug
+    DESTDIR = $$BUILD
+    win32 {
+        TARGET = $$member(TARGET, 0)d
+    }
+    macx {
+        TARGET = $$member(TARGET, 0)_debug
     }
 } else {
-        macx {
-        CONFIG(debug, debug|release) {
-            TARGET = $$member(TARGET, 0)_debug
-        }
-    }
+    BUILD = release
+    DESTDIR = $$BUILD
 }
 
 unix:!symbian {
@@ -87,15 +81,22 @@ unix {
         -O2 -finline-functions
 }
 
-QMAKE_POST_LINK += $(MKDIR) $$VREEN_INCLUDE_DIR/private 
-$$escape_expand(\\n\\t)
-QMAKE_POST_LINK += && $(COPY) $$PWD/*.h $$VREEN_INCLUDE_DIR
-$$escape_expand(\\n\\t)
-QMAKE_POST_LINK += && $(COPY) $$PWD/*_p.h $$VREEN_INCLUDE_DIR/private
-$$escape_expand(\\n\\t)
+#include dir
+mkpath($$VREEN_INCLUDE_DIR/private)
+#QMAKE_POST_LINK += $$quote($(MKDIR) $$toNativeSeparators($$VREEN_INCLUDE_DIR/private)$$escape_expand(\n\t))
+
+QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/*.h) $$toNativeSeparators($$VREEN_INCLUDE_DIR)$$escape_expand(\n\t))
+QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/*_p.h) $$toNativeSeparators($$VREEN_INCLUDE_DIR/private)$$escape_expand(\n\t))
+#libs dir
+mkpath($$VREEN_LIBS_DIR)
+#QMAKE_POST_LINK += $$quote($(MKDIR) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
+
+win32:{
+    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.dll) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
+    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.lib) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
+}
+
 unix:{
-    QMAKE_POST_LINK += && $(MKDIR) $$VREEN_LIBS_DIR
-    $$escape_expand(\\n\\t)
-    QMAKE_POST_LINK += && $(COPY) $$PWD/*.a $$VREEN_LIBS_DIR
-    $$escape_expand(\\n\\t)
+    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.a) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
+    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD*.so) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 }

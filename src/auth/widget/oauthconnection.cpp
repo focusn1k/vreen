@@ -39,8 +39,8 @@
 #   include <QWebView>
 #endif
 
-#include <vreen/json.h>
 #include <vreen/connection_p.h>
+#include <vreen/json.h>
 #include <vreen/utils.h>
 
 #include <QDebug>

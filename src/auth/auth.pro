@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS = direct widget
+SUBDIRS = widget direct

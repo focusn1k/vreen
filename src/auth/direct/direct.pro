@@ -20,10 +20,29 @@ DEFINES += VREEN_DIRECTAUTH_CLIENT_SECRET=\\\"String\\\"
 DEFINES += VREEN_DIRECTAUTH_CLIENT_NAME=\\\"String\\\"
 
 INCLUDEPATH += ../../../include
-LIBS += -L../../../libs -lvreen
+LIBS += -L../../../libs
+
+CONFIG(debug, debug|release) {
+    BUILD = debug
+    DESTDIR = $$BUILD
+    win32 {
+        TARGET = $$member(TARGET, 0)d
+        LIBS += -lvreend
+    }
+    macx {
+        TARGET = $$member(TARGET, 0)_debug
+        LIBS += -lvreen_debug
+    }
+} else {
+    BUILD = release
+    DESTDIR = $$BUILD
+    LIBS += -lvreen
+}
+
+win32:{
+    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.lib) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
+}
+
 unix:{
-    QMAKE_POST_LINK = $(MKDIR) $$VREEN_LIBS_DIR
-    $$escape_expand(\\n\\t)
-    QMAKE_POST_LINK += && $(COPY) $$PWD/*.a $$VREEN_LIBS_DIR
-    $$escape_expand(\\n\\t)
+    QMAKE_POST_LINK = $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.a) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 }

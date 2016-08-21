@@ -39,6 +39,11 @@ CONFIG(debug, debug|release) {
     LIBS += -lvreen
 }
 
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+UI_DIR = $$DESTDIR/.ui
+
 win32:{
     QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.lib) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 }

@@ -47,6 +47,7 @@ symbian {
 CONFIG(debug, debug|release) {
     BUILD = debug
     DESTDIR = $$BUILD
+
     win32 {
         TARGET = $$member(TARGET, 0)d
     }
@@ -57,6 +58,11 @@ CONFIG(debug, debug|release) {
     BUILD = release
     DESTDIR = $$BUILD
 }
+
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+UI_DIR = $$DESTDIR/.ui
 
 unix:!symbian {
     maemo5 {
@@ -83,13 +89,10 @@ unix {
 
 #include dir
 mkpath($$VREEN_INCLUDE_DIR/private)
-#QMAKE_POST_LINK += $$quote($(MKDIR) $$toNativeSeparators($$VREEN_INCLUDE_DIR/private)$$escape_expand(\n\t))
-
 QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/*.h) $$toNativeSeparators($$VREEN_INCLUDE_DIR)$$escape_expand(\n\t))
 QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/*_p.h) $$toNativeSeparators($$VREEN_INCLUDE_DIR/private)$$escape_expand(\n\t))
 #libs dir
 mkpath($$VREEN_LIBS_DIR)
-#QMAKE_POST_LINK += $$quote($(MKDIR) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 
 win32:{
     QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.dll) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
@@ -97,6 +100,5 @@ win32:{
 }
 
 unix:{
-    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.a) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
-    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD*.so) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
+    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.so*) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 }

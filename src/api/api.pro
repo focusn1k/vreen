@@ -99,6 +99,10 @@ win32:{
     QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.lib) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 }
 
-unix:{
+unix:!macx{
     QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.so*) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
+}
+
+macx{
+    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.dylib) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
 }

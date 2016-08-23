@@ -18,8 +18,7 @@ SOURCES += $$PWD/*.cpp
 
 PUBLIC_HEADERS += $$PWD/*[^p].h
 PRIVATE_HEADERS += $$PWD/*_p.h
-HEADERS = $$PUBLIC_HEADERS \
-    $$PRIVATE_HEADERS
+HEADERS = $$PWD/*.h
 
 
 INCLUDEPATH += ../../../include
@@ -27,7 +26,6 @@ LIBS += -L../../../libs
 
 CONFIG(debug, debug|release) {
     BUILD = debug
-    DESTDIR = $$BUILD
     win32 {
         TARGET = $$member(TARGET, 0)d
         LIBS += -lvreend
@@ -38,24 +36,16 @@ CONFIG(debug, debug|release) {
     }
 } else {
     BUILD = release
-    DESTDIR = $$BUILD
     LIBS += -lvreen
 }
 
-OBJECTS_DIR = $$DESTDIR/.obj
-MOC_DIR = $$DESTDIR/.moc
-RCC_DIR = $$DESTDIR/.qrc
-UI_DIR = $$DESTDIR/.ui
+DESTDIR = $$VREEN_LIBS_DIR
+OBJECTS_DIR = $$BUILD/.obj
+MOC_DIR = $$BUILD/.moc
+RCC_DIR = $$BUILD/.qrc
+UI_DIR = $$BUILD/.ui
 
 
 #include dir
 mkpath($$VREEN_INCLUDE_DIR/auth)
 QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/*.h) $$toNativeSeparators($$VREEN_INCLUDE_DIR/auth)$$escape_expand(\n\t))
-
-win32:{
-    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.lib) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
-}
-
-unix:{
-    QMAKE_POST_LINK += $$quote($(COPY) $$toNativeSeparators($$PWD/$$BUILD/*.a) $$toNativeSeparators($$VREEN_LIBS_DIR)$$escape_expand(\n\t))
-}

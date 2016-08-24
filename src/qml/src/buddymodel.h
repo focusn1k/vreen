@@ -84,6 +84,7 @@ private slots:
 protected:
     bool checkContact(Vreen::Buddy *);
     void setBuddies(const Vreen::BuddyList &list);
+    virtual QHash<int, QByteArray> roleNames();
 private:
     QPointer<Vreen::Roster> m_roster;
     Vreen::BuddyList m_buddyList;

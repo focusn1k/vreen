@@ -96,7 +96,7 @@ void Client::onReplyCreated(Vreen::Reply *reply)
 void Client::onReplyFinished(const QVariant &)
 {
     Vreen::Reply *reply = Vreen::sender_cast<Vreen::Reply*>(sender());
-    qDebug() << "--Reply finished" << reply->networkReply()->url().encodedPath();
+    qDebug() << "--Reply finished" << reply->networkReply()->url().path(QUrl::FullyEncoded);
     //qDebug() << "--data" << reply->response();
 }
 

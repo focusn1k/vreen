@@ -69,6 +69,8 @@ private:
     QPointer<Vreen::CommentSession> m_session;
     Vreen::CommentList m_comments;
     int m_postId;
+protected:
+    virtual QHash<int, QByteArray> roleNames();
 };
 
 #endif // COMMENTSMODEL_H

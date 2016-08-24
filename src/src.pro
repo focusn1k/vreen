@@ -1,5 +1,6 @@
 TEMPLATE = subdirs
 
-SUBDIRS = api auth
+SUBDIRS = api auth qml
 
 auth.depends = api
+qml.depends = auth

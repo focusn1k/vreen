@@ -61,6 +61,7 @@ DeclarativeView::DeclarativeView(QWindow *parent) :
 {
     QQmlEngine *e = engine();
     e->addImportPath("../../bin");
+    e->addImportPath("../../libs");
 
     setSource(QUrl(adjustPath("qml/main.qml")));
     setResizeMode(SizeRootObjectToView);

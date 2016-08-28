@@ -4,6 +4,8 @@ TARGET = audio
 
 TEMPLATE = app
 
+CONFIG -= app_bundle
+
 QT += widgets network qml quick
 
 qtHaveModule(webkitwidgets) {
@@ -14,10 +16,11 @@ qtHaveModule(webkitwidgets) {
 }
 
 HEADERS += \
-        ../common/*.h
+        ../common/declarativeview.h
 
 SOURCES += \
-        ../common/*.cpp
+        ../common/declarativeview.cpp \
+        ../common/main.cpp
 
 OTHER_FILES += \
         qml/*.qml \

@@ -5,6 +5,7 @@ QT += testlib network
 
 TARGET = app
 
+CONFIG -= app_bundle
 CONFIG += console depend_includepath testcase
 qtHaveModule(webkitwidgets) {
     QT += webkitwidgets
@@ -16,11 +17,8 @@ qtHaveModule(webkitwidgets) {
 INCLUDEPATH += ../../../include/vreen \
             ../..
 
-HEADERS += \
-        *.h
-
 SOURCES += \
-        *.cpp
+        tst_longpoll.cpp
 
 CONFIG(debug, debug|release) {
     BUILD = debug

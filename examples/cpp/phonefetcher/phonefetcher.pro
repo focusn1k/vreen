@@ -11,6 +11,8 @@ qtHaveModule(webkitwidgets) {
 
 TARGET = phonefetcher
 
+CONFIG -= app_bundle
+
 TEMPLATE = app
 
 HEADERS = *.h

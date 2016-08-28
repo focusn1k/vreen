@@ -41,11 +41,11 @@ UI_DIR = $$BUILD/.ui
 TEMPLATE = lib
 CONFIG += plugin
 
-HEADERS += \
-    src/*.h
+HEADERS = \
+        src/*.h
 
-SOURCES += \
-    src/*.cpp
+SOURCES = \
+        src/*.cpp
 
 OTHER_FILES += \
     qmldir/*

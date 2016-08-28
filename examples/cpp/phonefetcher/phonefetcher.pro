@@ -18,12 +18,20 @@ HEADERS = *.h
 SOURCES = *.cpp
 
 include(../../../vreencore.pri)
-LIBS += -lvreenoauth -lvreen
 
 CONFIG(debug, debug|release) {
     BUILD = debug
+    win32 {
+        TARGET = $$member(TARGET, 0)d
+        LIBS += -lvreend -lvreenoauthd
+    }
+    macx {
+        TARGET = $$member(TARGET, 0)_debug
+        LIBS += -lvreen_debug -lvreenoauth_debug
+    }
 } else {
     BUILD = release
+    LIBS += -lvreen -lvreenoauth
 }
 
 DESTDIR = $$VREEN_BUILD_TREE/examples/$$TARGET

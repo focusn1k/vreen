@@ -13,7 +13,6 @@ qtHaveModule(webkitwidgets) {
     DEFINES += VREEN_WITH_WEBENGINE
 }
 
-LIBS += -lvreen -lvreenoauth
 INCLUDEPATH += ../../../include/vreen \
             ../..
 
@@ -25,8 +24,17 @@ SOURCES += \
 
 CONFIG(debug, debug|release) {
     BUILD = debug
+    win32 {
+        TARGET = $$member(TARGET, 0)d
+        LIBS += -lvreend -lvreenoauthd
+    }
+    macx {
+        TARGET = $$member(TARGET, 0)_debug
+        LIBS += -lvreen_debug -lvreenoauth_debug
+    }
 } else {
     BUILD = release
+    LIBS += -lvreen -lvreenoauth
 }
 
 DESTDIR = $$BUILD

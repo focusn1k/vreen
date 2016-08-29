@@ -30,6 +30,7 @@
 #include <groupmanager.h>
 #include <QDateTime>
 #include <QNetworkReply>
+#include <QUrlQuery>
 
 namespace {
 
@@ -44,18 +45,21 @@ NewsFeedModel::NewsFeedModel(QObject *parent) :
     QAbstractListModel(parent),
     m_newsItemComparator(news_item_comparator, Qt::DescendingOrder)
 {
-    auto roles = roleNames();
-    roles[TypeRole] = "type";
-    roles[PostIdRole] = "postId";
-    roles[FromRole] = "from";
-    roles[DateRole] = "date";
-    roles[BodyRole] = "body";
-    roles[AttachmentsRole] = "attachments";
-    roles[LikesRole] = "likes";
-    roles[RepostsRole] = "reposts";
-    roles[CommentsRole] = "comments";
-    roles[OwnerRole] = "owner";
-    setRoleNames(roles);
+}
+
+QHash<int, QByteArray> NewsFeedModel::roleNames() {
+    QHash<int, QByteArray> list = QAbstractListModel::roleNames();
+    list.insert(TypeRole, "type");
+    list.insert(PostIdRole, "postId");
+    list.insert(FromRole, "from");
+    list.insert(DateRole, "date");
+    list.insert(BodyRole, "body");
+    list.insert(AttachmentsRole, "attachments");
+    list.insert(LikesRole, "likes");
+    list.insert(RepostsRole, "reposts");
+    list.insert(CommentsRole, "comments");
+    list.insert(OwnerRole, "owner");
+    return list;
 }
 
 QObject *NewsFeedModel::client() const
@@ -204,10 +208,11 @@ void NewsFeedModel::onNewsReceived(const Vreen::NewsItemList &items)
 void NewsFeedModel::onAddLike(const QVariant &response)
 {
     auto reply = Vreen::sender_cast<Vreen::Reply*>(sender());
-    auto url = reply->networkReply()->url();
+    auto url = reply->networkReply();
+    QUrlQuery urlQuery(url->url());
 
-    int postId = url.queryItemValue("post_id").toInt();
-    int retweet = url.queryItemValue("repost").toInt();
+    int postId = urlQuery.queryItemValue("post_id").toInt();
+    int retweet = urlQuery.queryItemValue("repost").toInt();
     auto map = response.toMap();
     int likes = map.value("likes").toInt();
     int reposts = map.value("reposts").toInt();
@@ -234,8 +239,9 @@ void NewsFeedModel::onDeleteLike(const QVariant &response)
 {
     auto reply = Vreen::sender_cast<Vreen::Reply*>(sender());
     auto url = reply->networkReply()->url();
+    QUrlQuery urlQuery(url);
 
-    int postId = url.queryItemValue("post_id").toInt();
+    int postId = urlQuery.queryItemValue("post_id").toInt();
     int likes = response.toMap().value("likes").toInt();
     int index = findNews(postId);
     if (index != -1) {

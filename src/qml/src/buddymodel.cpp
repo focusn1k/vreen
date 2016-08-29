@@ -34,9 +34,12 @@ BuddyModel::BuddyModel(QObject *parent) :
     m_friendsOnly(true),
     m_buddyComparator(BuddyModel::CompareType::comparator, Qt::AscendingOrder)
 {
-    auto roles = roleNames();
-    roles[ContactRole] = "contact";
-    setRoleNames(roles);
+}
+
+QHash<int, QByteArray> BuddyModel::roleNames() {
+    QHash<int, QByteArray> list = QAbstractListModel::roleNames();
+    list.insert(ContactRole, "contact");
+    return list;
 }
 
 void BuddyModel::setRoster(Vreen::Roster *roster)

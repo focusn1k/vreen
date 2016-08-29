@@ -75,6 +75,7 @@ protected:
     void insertNews(int index, const Vreen::NewsItem &data);
     void replaceNews(int index, const Vreen::NewsItem &data);
     inline Vreen::Contact *findContact(int id) const;
+    virtual QHash<int, QByteArray> roleNames();
 private slots:
     void onNewsReceived(const Vreen::NewsItemList &data);
     void onAddLike(const QVariant &response);

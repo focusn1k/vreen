@@ -12,11 +12,39 @@ Vreen is extensible Qt-based asynchronious vk.com api library.
 
 ## Compiling
 
+### With qbs
+
 ```bash
     $ qbs install --clean-install-root --install-root $LOCAL_PREFIX release
 ```
 
+### Without qbs
+
+#### Linux/macOS
+
+```bash
+    $ qmake vreen.pro
+    $ make
+```
+#### Windows
+
+```bash
+    $ qmake vreen.pro
+    $ vcvarsall.bat
+    $ nmake
+```
+Files will be placed to the include and libs directories
+
+
+
 ## Usage
+
+### Include to the project (for non-qbs way)
+```qmake
+LIBS += -lvreenoauth -lvreen
+include(<path_to_vreen>/vreen/vreencore.pri)
+```
+
 
 ### From C++
 

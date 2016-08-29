@@ -22,11 +22,11 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#include "directconnection_p.h"
+#include "directconnection.h"
 #include <vreen/json.h>
 #include <vreen/reply.h>
 
-#include <QUrl>
+#include <QUrlQuery>
 #include <QNetworkReply>
 #include <QCryptographicHash>
 #include <QStringList>
@@ -101,11 +101,12 @@ QNetworkRequest DirectConnection::makeRequest(const QString &method, const QVari
 {
     QUrl url = serverUrls.apiServer;
     url.setPath(url.path() % QLatin1Literal("/") % method);
+    QUrlQuery query;
     auto it = args.constBegin();
     for (; it != args.constEnd(); it++)
-        url.addQueryItem(it.key(), it.value().toString());
-    url.addEncodedQueryItem("access_token", m_token.accessToken);
-
+        query.addQueryItem(it.key(), it.value().toString());
+    query.addQueryItem("access_token", m_token.accessToken);
+    url.setQuery(query);
     QNetworkRequest request(url);
     return request;
 }
@@ -113,7 +114,9 @@ QNetworkRequest DirectConnection::makeRequest(const QString &method, const QVari
 void DirectConnection::decorateRequest(QNetworkRequest &request)
 {
     auto url = request.url();
-    url.addEncodedQueryItem("access_token", m_token.accessToken);
+    QUrlQuery query(url);
+    query.addQueryItem("access_token", m_token.accessToken);
+    url.setQuery(query);
     request.setUrl(url);
 }
 
@@ -145,13 +148,16 @@ void DirectConnection::setConnectionState(Client::State state)
 void DirectConnection::getToken(const QString &login, const QString &password)
 {
     QUrl url = serverUrls.authServer;
-    url.addEncodedQueryItem("grant_type", loginVars.grantType);
-    url.addEncodedQueryItem("client_id", loginVars.clientId);
-    url.addEncodedQueryItem("client_secret", loginVars.clientSecret);
-    url.addEncodedQueryItem("scope", QByteArray::number(loginVars.scope));
+    QUrlQuery query;
+    query.addQueryItem("grant_type", loginVars.grantType);
+    query.addQueryItem("client_id", loginVars.clientId);
+    query.addQueryItem("client_secret", loginVars.clientSecret);
+    query.addQueryItem("scope", QByteArray::number(loginVars.scope));
 
-    url.addQueryItem(QLatin1String("username"), login); //TODO use C++11 literals in suffix
-    url.addEncodedQueryItem("password", paranoicEscape(password.toUtf8()));
+    query.addQueryItem(QLatin1String("username"), login); //TODO use C++11 literals in suffix
+    query.addQueryItem("password", paranoicEscape(password.toUtf8()));
+
+    url.setQuery(query);
 
     QNetworkReply *reply = get(QNetworkRequest(url));
     connect(reply, SIGNAL(finished()), SLOT(getTokenFinished()));

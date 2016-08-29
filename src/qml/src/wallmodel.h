@@ -75,6 +75,8 @@ private:
     QPointer<Vreen::Contact> m_contact;
     QPointer<Vreen::WallSession> m_session;
     Vreen::WallPostList m_posts;
+protected:
+    virtual QHash<int, QByteArray> roleNames();
 };
 
 #endif // WALLMODEL_H
